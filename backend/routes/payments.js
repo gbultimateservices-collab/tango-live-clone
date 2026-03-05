@@ -24,14 +24,14 @@ const COIN_PACKAGES = {
 router.post('/razorpay/create-order', async (req, res) => {
   try {
     const { userId, packageId } = req.body;
-    const package = COIN_PACKAGES[packageId];
+    const pkg = COIN_PACKAGES[packageId];
 
-    if (!package) {
+    if (!pkg) {
       return res.status(400).json({ error: 'Invalid package' });
     }
 
     const options = {
-      amount: package.price * 100, // amount in paise
+      amount: pkg.price * 100, // amount in paise
       currency: 'INR',
       receipt: `order_${Date.now()}`
     };
@@ -41,8 +41,8 @@ router.post('/razorpay/create-order', async (req, res) => {
     const payment = new Payment({
       user: userId,
       orderId: order.id,
-      amount: package.price,
-      coins: package.coins,
+      amount: pkg.price,
+      coins: pkg.coins,
       paymentGateway: 'razorpay',
       status: 'pending'
     });
@@ -101,9 +101,9 @@ router.post('/razorpay/verify', async (req, res) => {
 router.post('/paytm/initiate', async (req, res) => {
   try {
     const { userId, packageId } = req.body;
-    const package = COIN_PACKAGES[packageId];
+    const pkg = COIN_PACKAGES[packageId];
 
-    if (!package) {
+    if (!pkg) {
       return res.status(400).json({ error: 'Invalid package' });
     }
 
@@ -112,8 +112,8 @@ router.post('/paytm/initiate', async (req, res) => {
     const payment = new Payment({
       user: userId,
       orderId: orderId,
-      amount: package.price,
-      coins: package.coins,
+      amount: pkg.price,
+      coins: pkg.coins,
       paymentGateway: 'paytm',
       status: 'pending'
     });
@@ -124,7 +124,7 @@ router.post('/paytm/initiate', async (req, res) => {
     res.json({
       success: true,
       orderId: orderId,
-      amount: package.price,
+      amount: pkg.price,
       message: 'Paytm payment initiated'
     });
   } catch (error) {
@@ -136,9 +136,9 @@ router.post('/paytm/initiate', async (req, res) => {
 router.post('/phonepe/initiate', async (req, res) => {
   try {
     const { userId, packageId } = req.body;
-    const package = COIN_PACKAGES[packageId];
+    const pkg = COIN_PACKAGES[packageId];
 
-    if (!package) {
+    if (!pkg) {
       return res.status(400).json({ error: 'Invalid package' });
     }
 
@@ -147,8 +147,8 @@ router.post('/phonepe/initiate', async (req, res) => {
     const payment = new Payment({
       user: userId,
       orderId: orderId,
-      amount: package.price,
-      coins: package.coins,
+      amount: pkg.price,
+      coins: pkg.coins,
       paymentGateway: 'phonepe',
       status: 'pending'
     });
@@ -159,7 +159,7 @@ router.post('/phonepe/initiate', async (req, res) => {
     res.json({
       success: true,
       orderId: orderId,
-      amount: package.price,
+      amount: pkg.price,
       message: 'PhonePe payment initiated'
     });
   } catch (error) {
